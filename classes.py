@@ -27,11 +27,11 @@ class RNN:
 
         self.z = np.matmul(self.r, self.w)
 
-        return self.r, self.z
+        return self.z, self.r
 
-    def update(self, error, response):
+    def update(self, error):
 
-        self.P = self.P - (self.P @ response @ response.transpose() @ self.P)/(1+response.transpose() @ self.P @ response)
+        self.P = self.P - (self.P @ self.r @ self.r.transpose() @ self.P)/(1+self.r.transpose() @ self.P @ self.r)
 
-        self.w = self.w - error @ self.P @ response
+        self.w = self.w - error @ self.P @ self.r
 
