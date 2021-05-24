@@ -78,10 +78,10 @@ def plot_square_func(noise=False):
 
 def plot_sine_waves():
     F = 1  # No. of cycles per second
-    T = 60.e-3  # Time period, T = 60 ms
-    Fs = 5.e3  # No. of samples per second, Fs = 50 kHz
-    Ts = 1. / Fs  # Sampling interval, Ts = 20 us
-    N = int(T / Ts)  # No. of samples for 2 ms, N = 100
+    T = 60.e-3  # Time period
+    Fs = 5.e3  # No. of samples per second
+    Ts = 1. / Fs  # Sampling interval
+    N = int(T / Ts)  # No. of samples
 
     t = np.linspace(0, 2, N)
     signal = np.sin(2 * np.pi * F * t/2)
@@ -89,11 +89,11 @@ def plot_sine_waves():
     plt.figure(dpi=300)
     plt.plot(t, signal)
 
-    F = 120.e2  # No. of cycles per second, F = 500 Hz
-    T = 10.e-3  # Time period, T = 2 ms
-    Fs = 50.e3  # No. of samples per second, Fs = 50 kHz
-    Ts = 1. / Fs  # Sampling interval, Ts = 20 us
-    N = int(T / Ts)  # No. of samples for 2 ms, N = 100
+    F = 120.e2  # No. of cycles per second
+    T = 10.e-3  # Time period
+    Fs = 50.e3  # No. of samples per second
+    Ts = 1. / Fs  # Sampling interval
+    N = int(T / Ts)  # No. of samples
 
     t = np.linspace(0, 0.25, N)
     signal = np.sin(2 * np.pi * F * t)
