@@ -1,4 +1,5 @@
 from scipy import signal, sparse
+from scipy.integrate import odeint
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -41,7 +42,6 @@ plt.plot(t, periodic_func(t, noise=True))
 plt.show()
 
 
-
 def square_func(t, noise=False):
     """returns a discontinuous function with a square wave"""
     my_sum = signal.square(2 * np.pi * 5 * t)
@@ -58,4 +58,3 @@ plt.show()
 plt.plot(t, square_func(t,noise=True))
 plt.ylim(-2, 2)
 plt.show()
-
