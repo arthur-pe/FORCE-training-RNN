@@ -29,9 +29,9 @@ class RNN:
 
     def step(self, dt):
 
-        self.x = self.x + (dt/self.tau)*(-self.x+(self.g_G_G*self.r @ (self.J_G_G *self.J_G_G_mask) + self.g_Gz*self.z @ self.J_Gz))
+        self.x = self.x + (dt/self.tau)*(-self.x+np.tanh(self.g_G_G*self.r @ (self.J_G_G *self.J_G_G_mask) + self.g_Gz*self.z @ self.J_Gz))
 
-        self.r = np.tanh(self.x)
+        self.r = self.x
 
         self.z = np.matmul(self.r, self.w)
 
