@@ -24,9 +24,7 @@ class lorenz:
 def plot_lorenz():
     t = np.linspace(0,10,10000)
     ode = lorenz(t,x0=np.array([10,10,10]),rho=28,sigma=10,beta=8/3)
-    solution = ode.integrate()
-
-    print(solution.shape)
+    solution = ode.integrate() # 3 x 10000
 
     #3D plot (for fun)
     fig = plt.figure()
