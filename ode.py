@@ -27,7 +27,7 @@ def plot_lorenz():
     solution = ode.integrate()
 
     print(solution.shape)
-    
+
     #3D plot (for fun)
     fig = plt.figure()
     ax = plt.axes(projection='3d')
