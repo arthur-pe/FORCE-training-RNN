@@ -5,13 +5,14 @@ class RNN:
     def __init__(self, N_G, output_dim, alpha, tau, g_G_G, g_Gz, p_G_G):
 
         #Right multiplications
-        self.J_G_G = np.random.randn(N_G,N_G)/(p_G_G*N_G) #recurrent weights
-        self.w = np.random.randn(N_G,output_dim)/(N_G) #decoder
+        self.J_G_G = np.random.randn(N_G,N_G)/np.sqrt(p_G_G*N_G) #recurrent weights
+        self.w = np.random.randn(N_G,output_dim)/np.sqrt(N_G) #decoder
         self.J_Gz = np.random.uniform(-1,1,(output_dim,N_G)) #feedback weights
 
-        self.J_G_G_mask = np.zeros((N_G,N_G))
+        self.J_G_G_mask = np.zeros(N_G**2)
         self.J_G_G_mask[:int(N_G**2*p_G_G)] = 1
         np.random.shuffle(self.J_G_G_mask)
+        self.J_G_G_mask = self.J_G_G_mask.reshape(N_G,N_G)
 
         self.g_G_G = g_G_G
         self.g_Gz = g_Gz
@@ -29,9 +30,9 @@ class RNN:
 
     def step(self, dt):
 
-        self.x = self.x + (dt/self.tau)*(-self.x+np.tanh(self.g_G_G*self.r @ (self.J_G_G *self.J_G_G_mask) + self.g_Gz*self.z @ self.J_Gz))
+        self.x = self.x + (dt/self.tau)*(-self.x+self.g_G_G*self.r @ (self.J_G_G *self.J_G_G_mask) + self.g_Gz*self.z @ self.J_Gz)
 
-        self.r = self.x
+        self.r = np.tanh(self.x)
 
         self.z = np.matmul(self.r, self.w)
 
