@@ -21,7 +21,7 @@ class RNN:
         self.r = np.tanh(self.x) #neuron state
 
         self.z = np.matmul(self.r,self.w) #output
-        self.P = np.ones((N_G,N_G))/alpha
+        self.P = np.identity(N_G)/alpha
 
         self.N_G = N_G #number neurons in generator
         self.output_dim = output_dim #1
@@ -30,7 +30,7 @@ class RNN:
 
     def step(self, dt):
 
-        self.x = self.x + (dt/self.tau)*(-self.x+self.g_G_G*self.r @ (self.J_G_G *self.J_G_G_mask) + self.g_Gz*self.z @ self.J_Gz)
+        self.x += (dt/self.tau)*(-self.x+self.g_G_G*self.r @ (self.J_G_G *self.J_G_G_mask) + self.g_Gz*self.z @ self.J_Gz)
 
         self.r = np.tanh(self.x)
 
@@ -40,6 +40,11 @@ class RNN:
 
     def update(self, error):
 
-        self.P = self.P - ((self.P @ self.r @ self.r.transpose()) * self.P)/(1+self.r.transpose() @ self.P @ self.r)
-        self.w = self.w - np.expand_dims((error * self.P @ self.r),1)
+        self.P -= (((self.P @ self.r) @ self.r.transpose()) * self.P)/(1+self.r.transpose() @ self.P @ self.r)
+
+        w_dot = np.expand_dims((error * self.P @ self.r),1)
+
+        self.w -= w_dot
+
+        return np.sqrt(np.sum(w_dot**2))
 
