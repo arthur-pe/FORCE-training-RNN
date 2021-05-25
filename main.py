@@ -4,7 +4,7 @@ from functions import *
 from ode import *
 from classes import *
 
-def train(net, t, target, delta_t, learning_start, learning_stop, dt):
+def train(net, t, target, update_freq, learning_start, learning_stop, dt):
 
     zs = []
     rs = []
@@ -18,7 +18,7 @@ def train(net, t, target, delta_t, learning_start, learning_stop, dt):
 
         len_w_dot = 0
 
-        if t[i]%delta_t == 0 and t[i]>=learning_start and t[i]<learning_stop:
+        if i%update_freq == 0 and t[i]>=learning_start and t[i]<learning_stop:
 
             len_w_dot = net.update(error)
 
@@ -37,13 +37,14 @@ def figure():
     learning_start = 2000
     learning_stop = 4000
     dt = 0.1
-    delta_t = 1
+    delta_t = 0.2
+    update_freq = int(delta_t/dt)
 
     t = np.arange(0,t_max,dt)
-    target = triangle_func(t, freq=1/500)
+    target = triangle_func(t, freq=1/500,amp=3.)
 
-    net = RNN(N_G=100, output_dim=1, alpha=1., tau=10., g_G_G=1.5, g_Gz=1., p_G_G=0.1)
-    zs, rs, len_w_dots = train(net, t, target, delta_t, learning_start=learning_start, learning_stop=learning_stop, dt=dt)
+    net = RNN(N_G=100, output_dim=1, alpha=1., tau=10., g_G_G=1.8, g_Gz=1., p_G_G=0.1)
+    zs, rs, len_w_dots = train(net, t, target, update_freq=update_freq, learning_start=learning_start, learning_stop=learning_stop, dt=dt)
 
     plt.figure(figsize=(10,5))
     plt.plot(t,target,linestyle='--',label='$f(t)$', zorder=2)

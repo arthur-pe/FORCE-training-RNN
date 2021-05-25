@@ -5,9 +5,9 @@ class RNN:
     def __init__(self, N_G, output_dim, alpha, tau, g_G_G, g_Gz, p_G_G):
 
         #Right multiplications
-        self.J_G_G = np.random.randn(N_G,N_G)/np.sqrt(p_G_G*N_G) #recurrent weights
+        self.J_G_G = np.random.randn(N_G,N_G)/np.sqrt(p_G_G*N_G)*g_G_G #recurrent weights
         self.w = np.random.randn(N_G,output_dim)/np.sqrt(N_G) #decoder
-        self.J_Gz = np.random.uniform(-1,1,(output_dim,N_G)) #feedback weights
+        self.J_Gz = np.random.uniform(-1,1,(output_dim,N_G))*g_Gz #feedback weights
 
         self.J_G_G_mask = np.zeros(N_G**2)
         self.J_G_G_mask[:int(N_G**2*p_G_G)] = 1
@@ -17,10 +17,10 @@ class RNN:
         self.g_G_G = g_G_G
         self.g_Gz = g_Gz
 
-        self.x = np.random.randn(N_G)
+        self.x = np.random.randn(N_G)*0.5
         self.r = np.tanh(self.x) #neuron state
 
-        self.z = np.matmul(self.r,self.w) #output
+        self.z = np.random.randn(1)*0.5 #output np.matmul(self.r,self.w)
         self.P = np.identity(N_G)/alpha
 
         self.N_G = N_G #number neurons in generator
@@ -30,7 +30,7 @@ class RNN:
 
     def step(self, dt):
 
-        self.x += (dt/self.tau)*(-self.x+self.g_G_G*self.r @ (self.J_G_G *self.J_G_G_mask) + self.g_Gz*self.z @ self.J_Gz)
+        self.x += (dt/self.tau)*(-self.x+self.r @ (self.J_G_G *self.J_G_G_mask) + self.z @ self.J_Gz)
 
         self.r = np.tanh(self.x)
 
