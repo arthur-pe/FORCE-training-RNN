@@ -2,6 +2,7 @@ from scipy import signal, sparse
 from scipy.integrate import odeint
 import numpy as np
 from matplotlib import pyplot as plt
+import os
 
 # wave target functions
 
@@ -20,6 +21,7 @@ def plot_complex_periodic_func():
     plt.xlabel('Time (s)')
     plt.ylabel('y-axis')
     plt.title("plot of complex periodic function")
+    plt.savefig(plots_dir + 'complex periodic function.png')
     plt.show()
 
 
@@ -35,6 +37,7 @@ def plot_triangle_func():
     plt.xlabel('Time (s)')
     plt.ylabel('y-axis')
     plt.title("plot of triangle function")
+    plt.savefig(plots_dir + 'triangle function.png')
     plt.show()
 
 
@@ -54,6 +57,7 @@ def plot_periodic_func(noise=False):
     plt.xlabel('Time (s)')
     plt.ylabel('y-axis')
     plt.title("plot of periodic function")
+    plt.savefig(plots_dir + 'periodic function.png')
     plt.show()
 
 
@@ -74,6 +78,7 @@ def plot_square_func(noise=False):
     plt.xlabel('Time (s)')
     plt.ylabel('y-axis')
     plt.title("plot of square function")
+    plt.savefig(plots_dir + 'square function.png')
     plt.show()
 
 def plot_sine_waves():
@@ -101,6 +106,17 @@ def plot_sine_waves():
     plt.xlabel('Time (s)')
     plt.ylabel('y-axis')
     plt.title("plot of sinus functions")
+    plt.savefig(plots_dir + 'sinus functions.png')
     plt.show()
 
-# plot_sine_waves()
+
+script_dir = os.path.dirname(__file__)
+plots_dir = os.path.join(script_dir, 'plots/')
+
+if not os.path.isdir(plots_dir):
+    os.makedirs(plots_dir)
+
+plot_sine_waves()
+plot_complex_periodic_func()
+plot_complex_periodic_func(noise=)
+plot_square_func()
