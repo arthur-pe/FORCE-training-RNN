@@ -6,10 +6,10 @@ class RNN:
     def __init__(self, N_G, output_dim, alpha, tau, g_G_G, g_Gz, p_G_G):
 
         #Right multiplications
-        self.J_G_G = (sparse.random(N_G,N_G,density=p_G_G).toarray()/np.sqrt(p_G_G*N_G))*g_G_G #recurrent weights
+        self.J_G_G = sparse.random(N_G,N_G,density=p_G_G,data_rvs=np.random.randn).toarray()/np.sqrt(p_G_G*N_G) #recurrent weights
         self.w = np.random.randn(N_G,output_dim)/np.sqrt(N_G) #decoder
         #self.w = np.zeros((N_G,output_dim))/np.sqrt(N_G)
-        self.J_Gz = (2*np.random.rand(N_G,output_dim) - 1)*g_Gz #feedback weights
+        self.J_Gz = (2*np.random.rand(N_G,output_dim) - 1) #feedback weights
 
         """self.J_G_G_mask = np.zeros(N_G**2)
         self.J_G_G_mask[:int(N_G**2*p_G_G)] = 1
@@ -41,7 +41,7 @@ class RNN:
         return self.z, self.r"""
 
     def step(self, dt):
-        self.x = (1 - dt / self.tau) * self.x + self.J_G_G.dot(self.r) * dt / self.tau +  self.J_Gz.dot(self.z) * dt / self.tau
+        self.x = (1 - dt / self.tau) * self.x + self.g_G_G*self.J_G_G.dot(self.r) * dt / self.tau +  self.g_Gz*self.J_Gz.dot(self.z) * dt / self.tau
         self.r = np.tanh(self.x)
         self.z = self.w.T.dot(self.r).flatten()
 

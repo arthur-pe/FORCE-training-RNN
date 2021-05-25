@@ -37,7 +37,7 @@ def figure():
     learning_start = 800
     learning_stop = 1600
     dt = 0.1
-    delta_t = 1
+    delta_t = 0.2
     update_freq = int(delta_t/dt)
 
     t = np.arange(0,t_max,dt)

@@ -115,8 +115,3 @@ plots_dir = os.path.join(script_dir, 'plots/')
 
 if not os.path.isdir(plots_dir):
     os.makedirs(plots_dir)
-
-plot_sine_waves()
-plot_complex_periodic_func()
-plot_complex_periodic_func(noise=)
-plot_square_func()
