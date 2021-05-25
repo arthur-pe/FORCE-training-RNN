@@ -33,17 +33,17 @@ def train(net, t, target, update_freq, learning_start, learning_stop, dt):
 
 def figure():
 
-    t_max = 6000
-    learning_start = 2000
-    learning_stop = 4000
+    t_max = 2400
+    learning_start = 800
+    learning_stop = 1600
     dt = 0.1
-    delta_t = 0.2
+    delta_t = 1
     update_freq = int(delta_t/dt)
 
     t = np.arange(0,t_max,dt)
-    target = triangle_func(t, freq=1/500,amp=3.)
+    target = triangle_func(t, freq=1/600,amp=3.)
 
-    net = RNN(N_G=100, output_dim=1, alpha=1., tau=10., g_G_G=1.8, g_Gz=1., p_G_G=0.1)
+    net = RNN(N_G=1000, output_dim=1, alpha=1., tau=10., g_G_G=1.5, g_Gz=1., p_G_G=0.1)
     zs, rs, len_w_dots = train(net, t, target, update_freq=update_freq, learning_start=learning_start, learning_stop=learning_stop, dt=dt)
 
     plt.figure(figsize=(10,5))
