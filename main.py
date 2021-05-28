@@ -3,7 +3,7 @@ import argparse
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Train RNN on simulated data with FORCE')
-    parser.add_argument('--function', type=str, choices=['triangle', 'square', 'periodic', 'complex_periodic', 'noisy_periodic', 'lorenz_attractor'], default='triangle')
+    parser.add_argument('--function', type=str, choices=['triangle', 'square', 'periodic', 'complex_periodic', 'noisy_periodic', 'lorenz'], default='triangle')
     parser.add_argument('--simulation_duration', type=int, default=6000)
     parser.add_argument('--learning_start', type=int, default=2000)
     parser.add_argument('--learning_stop', type=int, default=4000)
