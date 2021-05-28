@@ -245,4 +245,4 @@ def figure1(periodic, lorenz, square, complex_periodic, noisy_periodic, triangle
 data = load()
 figure1(data[0],data[1],data[2],data[3],data[4],data[5],data[6])
 
-#compute_plot('lorenz',dt=1, delta_t=2, save=True)
+#compute_plot('complex_periodic',dt=1, delta_t=2, save=True)
