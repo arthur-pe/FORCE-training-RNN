@@ -55,15 +55,19 @@ def compute_plot(f, t_max = 6000, learning_start = 2000, learning_stop = 4000, d
     elif f=='lorenz':
         ode = lorenz(t/4, x0=np.array([10, 10, 10]), rho=28, sigma=10, beta=8 / 3)
         target = ode.integrate()[0]/8
+    elif f=='sine_low':
+        target = np.sin(2*np.pi*t/4000+np.pi/4)*2
+    elif f=='sine_high':
+        target = np.sin((2*np.pi*t)/60)*2
     else:
         raise Exception('Incorrect function')
 
     zs, rs, len_w_dots = train(net, t, target, update_freq=update_freq, learning_start=learning_start, learning_stop=learning_stop, dt=dt)
 
     if save==True:
-        np.save(f+'.npy',np.array([t,target,zs,len_w_dots]))
+        np.save(f+'5.npy',np.array([t,target,zs,len_w_dots]))
         rs = np.array(rs)[:, :10]
-        np.save(f+'_rs.npy',rs)
+        np.save(f+'5_rs.npy',rs)
 
     plt.figure(figsize=(12,5))
     neuron_sample_size = 5
@@ -124,15 +128,18 @@ def load():
     square = np.load('results/square.npy', allow_pickle=True)
     complex_periodic = np.load('results/complex_periodic.npy', allow_pickle=True)
     noisy_periodic = np.load('results/noisy_periodic.npy', allow_pickle=True)
+    sine_low = np.load('results/sine-low.npy',allow_pickle=True)
+    sine_high = np.load('results/sine-high.npy', allow_pickle=True)
     triangle = np.load('results/triangle.npy', allow_pickle=True)
     triangle_rs = np.load('results/triangle_rs.npy', allow_pickle=True)
 
-    return periodic, lorenz, square, complex_periodic, noisy_periodic, triangle, triangle_rs
+    return periodic, lorenz, square, complex_periodic, noisy_periodic, triangle, triangle_rs, sine_low, sine_high
 
-def figure1(periodic, lorenz, square, complex_periodic, noisy_periodic, triangle, triangle_rs, t_max,learning_start, learning_stop,dt):
+def figure1(periodic, lorenz, square, complex_periodic, noisy_periodic, triangle, triangle_rs,
+            sine_low, sine_high, t_max,learning_start, learning_stop,dt):
 
     fig = plt.figure(figsize=(15,10),tight_layout=True)
-    gs = gridspec.GridSpec(4,3)
+    gs = gridspec.GridSpec(5,3)
 
     plt.rc('axes', labelsize=12)  # fontsize of the x and y labels
 
@@ -230,6 +237,42 @@ def figure1(periodic, lorenz, square, complex_periodic, noisy_periodic, triangle
     sub_plots(t,target,zs,ax,learning_start,learning_stop,dt)
     ax.set_ylim(min(target)-1,max(target)+1)
     ax.text(t[int(3*learning_start/dt/4)-40], ax.get_ylim()[1]-(ax.get_ylim()[1]-ax.get_ylim()[0])/8, 'D.', fontsize=14, fontweight='bold')
+
+    #-----------------sine high----------------
+    t = sine_high[0]
+    target = sine_high[1]
+    zs = sine_high[2]
+    ax = fig.add_subplot(gs[4,2])
+    sub_plots(t,target,zs,ax,learning_start,learning_stop,dt)
+    ax.set_ylim(min(target)-1,max(target)+1)
+    ax.text(t[int(3*learning_start/dt/4)-40], ax.get_ylim()[1]-(ax.get_ylim()[1]-ax.get_ylim()[0])/8, 'H.', fontsize=14, fontweight='bold')
+
+    #-----------------sine low----------------
+    t = sine_low[0]
+    target = sine_low[1]
+    zs = sine_low[2]
+    ax = fig.add_subplot(gs[4,:2])
+
+    ax.plot(t[2200:5000],
+            target[2200:5000], color='#1f77b4', linestyle='--',
+            zorder=2)
+    ax.plot(t[2200:5000],
+            zs[2200:5000], color='#ff7f0e', zorder=1)
+
+    ax.axvline(4000, color='black', alpha=0.5)
+
+    ax.set_xlabel('time (ms)')
+
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+
+    ax.set_yticks([])
+    ax.set_ylim(min(target)-1,max(target)+1)
+    ax.text(2200-85, ax.get_ylim()[1]-(ax.get_ylim()[1]-ax.get_ylim()[0])/8, 'G.', fontsize=14, fontweight='bold')
+
+    #---------------------------------------
     plt.savefig('figure1.pdf')
     plt.savefig('figure1.png')
     plt.show()
