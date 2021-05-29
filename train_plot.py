@@ -138,7 +138,7 @@ def load():
 def figure1(periodic, lorenz, square, complex_periodic, noisy_periodic, triangle, triangle_rs,
             sine_low, sine_high, t_max,learning_start, learning_stop,dt):
 
-    fig = plt.figure(figsize=(15,10),tight_layout=True)
+    fig = plt.figure(figsize=(15,11),tight_layout=True)
     gs = gridspec.GridSpec(5,3)
 
     plt.rc('axes', labelsize=12)  # fontsize of the x and y labels
