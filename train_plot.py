@@ -5,6 +5,7 @@ from classes import *
 from matplotlib import gridspec
 
 def train(net, t, target, update_freq, learning_start, learning_stop, dt):
+    """main training loop of the network"""
 
     zs = []
     rs = []
@@ -33,6 +34,7 @@ def train(net, t, target, update_freq, learning_start, learning_stop, dt):
 
 def compute_plot(f, t_max = 6000, learning_start = 2000, learning_stop = 4000, dt = 0.1, delta_t = 0.2,
                  N_G=1500, alpha=1., tau=10., g_G_G=1.5, g_Gz=1., p_G_G=0.1, seed=7, save=False):
+    """train, plot, and possibly save the output of a network given some parameters and a target function"""
 
     np.random.seed(seed)
 
@@ -107,8 +109,11 @@ def compute_plot(f, t_max = 6000, learning_start = 2000, learning_stop = 4000, d
     plt.show()
 
 def sub_plots(t,target,zs, ax, learning_start, learning_stop, dt):
+    """plot the target vs. the output over time"""
+
     ax.plot(t[int(3*learning_start/dt/4):-int(3*learning_start/dt/4)], target[int(3*learning_start/dt/4):-int(3*learning_start/dt/4)], color='#1f77b4', linestyle='--', zorder=2)
     ax.plot(t[int(3*learning_start/dt/4):-int(3*learning_start/dt/4)], zs[int(3*learning_start/dt/4):-int(3*learning_start/dt/4)], color='#ff7f0e', zorder=1)
+
 
     ax.axvline(learning_start, color='black', alpha=0.5)
     ax.axvline(learning_stop, color='black', alpha=0.5)
@@ -123,6 +128,7 @@ def sub_plots(t,target,zs, ax, learning_start, learning_stop, dt):
     ax.set_yticks([])
 
 def load():
+    """load the saved target, output, etc... from compute_plot()"""
     periodic = np.load('results/periodic.npy', allow_pickle=True)
     lorenz = np.load('results/lorenz.npy', allow_pickle=True)
     square = np.load('results/square.npy', allow_pickle=True)
@@ -137,6 +143,7 @@ def load():
 
 def figure1(periodic, lorenz, square, complex_periodic, noisy_periodic, triangle, triangle_rs,
             sine_low, sine_high, t_max,learning_start, learning_stop,dt):
+    """plots figure 2. of the Sussillo and Abbott (2009)"""
 
     fig = plt.figure(figsize=(15,11),tight_layout=True)
     gs = gridspec.GridSpec(5,3)
